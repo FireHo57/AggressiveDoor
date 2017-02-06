@@ -1,18 +1,17 @@
-from Communications import TCPServer
-from Common import message_queue
-import asyncio
+from Communications import TCPServer as TCP
+from aggDoor.Common import message_queue as mq
+
 import datetime
 
 
 def main():
     # set up the main server for running
-    my_queue = MessageQueue
+    my_queue = mq.MessageQueue()
 
-    server = TCPServer(myQueue)
+    server = TCP.TCPServer(my_queue)
 
     # main game loop
 
-    server.run()
     while True:
         now = datetime.datetime.now()
 

@@ -1,11 +1,13 @@
 import asyncio
-from Common import message_queue
+from aggDoor.Common import message_queue
+from aggDoor.Client.Communications import TCPClient as cC
 
 
 class TCPServer(asyncio.Protocol):
 
     def __init__(self, message_queue):
         self.message_queue = message_queue
+        print("I'm all made up!")
 
     def connection_made(self, transport):
         peername = transport.get_extra_info('peername')
@@ -25,20 +27,20 @@ class TCPServer(asyncio.Protocol):
         self.transport.close()
 
     def run(self):
-        loop = asyncio.get_event_loop()
+        self.loop = asyncio.get_event_loop()
         # Each client connection will create a new protocol instance
-        coro = loop.create_server(EchoServerClientProtocol, '127.0.0.1', 8888)
-        server = loop.run_until_complete(coro)
+        coro = loop.create_server(cC.TCPClient, '127.0.0.1', 8888)
+        self.server = loop.run_until_complete(coro)
 
         # Serve requests until Ctrl+C is pressed
-        print('Serving on {}'.format(server.sockets[0].getsockname()))
+        print('Serving on {}'.format(self.server.sockets[0].getsockname()))
         try:
             loop.run_forever()
         except KeyboardInterrupt:
             pass
 
-        # Close the server
-        server.close()
-        loop.run_until_complete(server.wait_closed())
-        loop.close()
+    def close(self):
+        self.server.close()
+        self.loop.run_until_complete(self.server.wait_closed())
+        self.loop.close()
 

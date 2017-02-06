@@ -2,7 +2,10 @@
 
 class MessageQueue(object):
 
-    self.commands = []
+    commands = []
+
+    def __init__(self):
+        print("Made the Message Queue!")
 
     def add_command(self , command):
         self.commands.append( command )

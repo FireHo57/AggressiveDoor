@@ -1,7 +1,7 @@
 import asyncio
 
 
-class EchoClientProtocol(asyncio.Protocol):
+class TCPClient(asyncio.Protocol):
     def __init__(self, message, loop):
         self.message = message
         self.loop = loop
@@ -20,7 +20,7 @@ class EchoClientProtocol(asyncio.Protocol):
 
 loop = asyncio.get_event_loop()
 message = 'Hello World!'
-coro = loop.create_connection(lambda: EchoClientProtocol(message, loop),
+coro = loop.create_connection(lambda: TCPClient(message, loop),
                               '127.0.0.1', 8888)
 loop.run_until_complete(coro)
 loop.run_forever()
