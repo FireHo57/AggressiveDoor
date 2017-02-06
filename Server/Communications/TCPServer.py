@@ -2,7 +2,7 @@ import asyncio
 from Common import message_queue
 
 
-class EchoServerClientProtocol(asyncio.Protocol):
+class TCPServer(asyncio.Protocol):
 
     def __init__(self, message_queue):
         self.message_queue = message_queue
@@ -33,9 +33,9 @@ class EchoServerClientProtocol(asyncio.Protocol):
         # Serve requests until Ctrl+C is pressed
         print('Serving on {}'.format(server.sockets[0].getsockname()))
         try:
-         loop.run_forever()
+            loop.run_forever()
         except KeyboardInterrupt:
-        pass
+            pass
 
         # Close the server
         server.close()
