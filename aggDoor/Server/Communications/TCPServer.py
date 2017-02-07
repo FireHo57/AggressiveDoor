@@ -29,7 +29,7 @@ class TCPServer(asyncio.Protocol):
     def run(self):
         self.loop = asyncio.get_event_loop()
         # Each client connection will create a new protocol instance
-        coro = loop.create_server(cC.TCPClient, '127.0.0.1', 8888)
+        coro = self.loop.create_server(cC.TCPClient, '127.0.0.1', 8888)
         self.server = loop.run_until_complete(coro)
 
         # Serve requests until Ctrl+C is pressed

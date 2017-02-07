@@ -18,10 +18,11 @@ class TCPClient(asyncio.Protocol):
         print('Stop the event loop')
         self.loop.stop()
 
-loop = asyncio.get_event_loop()
-message = 'Hello World!'
-coro = loop.create_connection(lambda: TCPClient(message, loop),
+    def run(self):
+        loop = asyncio.get_event_loop()
+        message = 'Hello World!'
+        coro = loop.create_connection(lambda: TCPClient(message, loop),
                               '127.0.0.1', 8888)
-loop.run_until_complete(coro)
-loop.run_forever()
-loop.close()
+        loop.run_until_complete(coro)
+        loop.run_forever()
+        loop.close()
