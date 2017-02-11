@@ -3,7 +3,7 @@ import asyncio
 
 class TCPStreamServer:
 
-    def accept_connection(self):
+    #def accept_connection(self):
 
     @asyncio.coroutine
     def handle_echo(self, reader, writer):
