@@ -26,7 +26,7 @@ class ChatServer:
             def connection_lost(self, exc):
                 # Callback: client disconnected.
                 if self.username is not None:
-                self.chat_server.remove_user(self.username)
+                    self.chat_server.remove_user(self.username)
  
             def send_msg(self, msg):
                 self.transport.write(msg.encode("utf-8"))
@@ -42,33 +42,33 @@ class ChatServer:
                     else:
                         self.chat_server.user_message(self.username, line)
 
-            def __init__(self, server_name, port, loop):
-                self.server_name = server_name
-                self.connections = {}
-                self.server = loop.create_server(
-                    lambda: self.ChatProtocol(self),
-                    host="", port=port)
-           
-           def broadcast(self, message):
-                for transport in self.connections.values():
-                    transport.write((message + "\n").encode("utf-8"))
-                
-           def add_user(self, username, transport):
-                if username in self.connections:
-                    return False
-                self.connections[username] = transport
-                self.broadcast("User " + username + " joined the room")
-                return True
+    def __init__(self, server_name, port, loop):
+        self.server_name = server_name
+        self.connections = {}
+        self.server = loop.create_server(
+            lambda: self.ChatProtocol(self),
+            host="", port=port)
+       
+    def broadcast(self, message):
+        for transport in self.connections.values():
+            transport.write((message + "\n").encode("utf-8"))
+            
+    def add_user(self, username, transport):
+        if username in self.connections:
+            return False
+        self.connections[username] = transport
+        self.broadcast("User " + username + " joined the room")
+        return True
 
-           def remove_user(self, username):
-                del self.connections[username]
-                self.broadcast("User " + username + " left the room")
-                
-           def get_users(self):
-                return self.connections.keys()
+    def remove_user(self, username):
+        del self.connections[username]
+        self.broadcast("User " + username + " left the room")
+            
+    def get_users(self):
+        return self.connections.keys()
 
-           def user_message(self, username, msg):
-                self.broadcast(username + ": " + msg)
+    def user_message(self, username, msg):
+        self.broadcast(username + ": " + msg)
 
 def main(argv):
     loop = asyncio.get_event_loop()
