@@ -45,10 +45,10 @@ class ChatServer:
                     writer = self.connections[found.group(0)][1]
                     message = data.replace( ("@"+found.group(0)) ,'' )
                     #remove the @username
-                    writer.write(("<private-"+username+">: "+message).encode("utf-8"))
+                    writer.write(("<private-"+username+">: "+message+"\n").encode("utf-8"))
 
                 except KeyError:
-                    self.connections[username][1].write(("User "+found.group(0)+" does not exist\n").encode("utf-8"))
+                    self.connections[username][1].write(("User "+found.group(0)+" does not exist"+"\n").encode("utf-8"))
             else:
                 self.broadcast(username + ": " + data)
 
