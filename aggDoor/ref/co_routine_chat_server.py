@@ -1,6 +1,5 @@
 import asyncio
 import sys
-import re
 __author__ = 'charlie'
 
 
@@ -37,20 +36,7 @@ class ChatServer:
             if not data:
                 del self.connections[username]
                 return None
-
-            data = data.strip()
-            if "@" in data:
-                try:
-                    found = re.search('(?<=@)\w+', data)
-                    writer = self.connections[found.group(0)][1]
-                    message = data.replace( ("@"+found.group(0)) ,'' )
-                    #remove the @username
-                    writer.write(("<private-"+username+">: "+message).encode("utf-8"))
-
-                except KeyError:
-                    self.connections[username][1].write(("User "+found.group(0)+" does not exist\n").encode("utf-8"))
-            else:
-                self.broadcast(username + ": " + data)
+            self.broadcast(username + ": " + data.strip())
 
     @asyncio.coroutine
     def accept_connection(self, reader, writer):
