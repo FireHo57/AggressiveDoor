@@ -4,7 +4,6 @@ import sys
 class ChatServer:
 
     
-
     class ChatProtocol(asyncio.Protocol):
 
             def __init__(self, chat_server):
