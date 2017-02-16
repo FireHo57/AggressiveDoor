@@ -1,12 +1,16 @@
 import asyncio
 import sys
 import re
+
+import command_queue
+
 __author__ = 'charlie'
 
 
 class ChatServer:
 
     def __init__(self, server_name, port, loop):
+        self.queues = dict()
         self.server_name = server_name
         self.connections = {}
         self.server = loop.run_until_complete(
@@ -49,7 +53,17 @@ class ChatServer:
 
                 except KeyError:
                     self.connections[username][1].write(("User "+found.group(0)+" does not exist"+"\n").encode("utf-8"))
-            else:
+            elif ">" in data:
+                #use this as a control character
+                try:
+                    found = re.search('(?<=>)\w+', data)
+                    command=found.group(0)
+                    target = self.queues.get(username)
+                    target.add_to_queue(command)
+                    self.broadcast( "COMMAND: " + command +" added to user "+username+"'s queue")
+                except:
+                    self.broadcast( "Damn" )
+            else:   
                 self.broadcast(username + ": " + data)
 
     @asyncio.coroutine
@@ -57,6 +71,7 @@ class ChatServer:
         writer.write(("Welcome to " + self.server_name + "\n").encode("utf-8"))
         username = (yield from self.prompt_username(reader, writer))
         if username is not None:
+            self.queues[username] = command_queue
             self.broadcast("User %r has joined the room" % (username,))
             yield from self.handle_connection(username, reader)
             self.broadcast("User %r has left the room" % (username,))
