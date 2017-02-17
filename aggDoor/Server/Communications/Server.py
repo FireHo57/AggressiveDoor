@@ -61,7 +61,7 @@ class ChatServer:
                     target = self.queues.get(username)
                     target.add_to_queue(command)
                     self.broadcast( "COMMAND: " + command +" added to user "+username+"'s queue")
-                except:
+                except KeyError:
                     self.broadcast( "Damn" )
             else:   
                 self.broadcast(username + ": " + data)
@@ -71,7 +71,7 @@ class ChatServer:
         writer.write(("Welcome to " + self.server_name + "\n").encode("utf-8"))
         username = (yield from self.prompt_username(reader, writer))
         if username is not None:
-            self.queues[username] = command_queue
+            self.queues[username] = command_queue.command_queue()
             self.broadcast("User %r has joined the room" % (username,))
             yield from self.handle_connection(username, reader)
             self.broadcast("User %r has left the room" % (username,))
