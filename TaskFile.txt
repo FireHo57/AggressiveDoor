@@ -1,1 +1,27 @@
+Things done:
 
+(0)Remove old client/server code - DONE - wysiwyg 
+(1) Get the server as a runnable object - DONE - using new style server has enabled this 
+(2) Get the server printing out all the commands it received - DONE - see above 
+(6) Modify the client code so that you can send commands over a command line interface - OBSELETE -no changes in client neccesary, new server allows this
+
+
+Things to do:
+
+(3) Implement one to one, one to many and one to all (but not self) messaging in server 
+(4) Apply some sort of validation to the commands (say.... do_THE_THING should work but THE_THING shouldn't) 
+  (4.1) Sort out responsibilities. There server shoudln't be concerned with anything except passing messages back and forth. Write some
+        sort of filter module to handle specific routing
+  
+(5) Implement requests in the server - I'm not entirely sure what I meant by 'requests' but I', going to sharpen this to - allow a user to print their command stack
+
+(7) Make the commands do something 
+(8) Flesh out the player object. Features I'd like:
+    (8.1) Some sort of physical interface (alter impulse, check place in xyz, etc)
+    (8.2) Groundwork for sprite setting (tbh as this is text base I'll settle for a generic description object)
+(9) Flesh out the server (not communications server) bit
+    (9.1) have an idea of 'where' players are in xyz
+    (9.2) have an idea of time and a 'game_clock' linked into an update system
+    
+(10) ???
+(11) Profit
