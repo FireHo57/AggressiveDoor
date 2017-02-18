@@ -2,7 +2,7 @@ import asyncio
 import sys
 import re
 
-import command_queue
+from State import player as p
 
 __author__ = 'charlie'
 
@@ -59,7 +59,7 @@ class ChatServer:
                     found = re.search('(?<=>)\w+', data)
                     command=found.group(0)
                     target = self.queues.get(username)
-                    target.add_to_queue(command)
+                    target.get_commands().add_to_queue(command)
                     self.broadcast( "COMMAND: " + command +" added to user "+username+"'s queue")
                 except KeyError:
                     self.broadcast( "Damn" )
@@ -71,7 +71,7 @@ class ChatServer:
         writer.write(("Welcome to " + self.server_name + "\n").encode("utf-8"))
         username = (yield from self.prompt_username(reader, writer))
         if username is not None:
-            self.queues[username] = command_queue.command_queue()
+            self.queues[username] = p.player(username)
             self.broadcast("User %r has joined the room" % (username,))
             yield from self.handle_connection(username, reader)
             self.broadcast("User %r has left the room" % (username,))
